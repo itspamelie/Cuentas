@@ -13,4 +13,8 @@ class Account extends Model
         'status',
         'user_id'
     ];
+    //INNER JOIN CON USER_ID
+    public function  user(){
+        return $this->hasOne(User::class,'id','user_id');
+    }
 }
