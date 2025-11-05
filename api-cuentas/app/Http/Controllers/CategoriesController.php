@@ -28,7 +28,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+        //name,type,user_id
     }
 
     /**
@@ -36,7 +36,20 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $validated = $request->validate([
+            'name'=>'required|string|min:2',
+            'type'=>'required|string|min:2',
+            'user_id'=>'required'
+        ]);
+
+        //metodo si los campos se llaman igual que en la base de datos
+        $data = Categorie::create($validated);
+          return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Recurso o dato insertado correctamente.",
+            "data"=>$data
+
+        ]);
     }
 
     /**
@@ -44,7 +57,18 @@ class CategoriesController extends Controller
      */
     public function show(string $id)
     {
-        //
+          $data = Categorie::find($id);
+        if($data){
+            return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Categoria encontrada.",
+            "data"=>$data
+        ]);
+        }
+        return response()->json([
+            "status"=>"error",
+            "mesage"=>"Categoria no encontrada."
+        ],400);
     }
 
     /**
@@ -60,7 +84,22 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name'=>'required|string|min:2',
+            'type'=>'required|string|min:2',
+            'user_id'=>'required'
+        ]);
+
+        //metodo si los campos se llaman igual que en la base de datos
+        $data = Categorie::findOrFail($id);
+        $data->update($validated);
+          return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Recurso o dato actualizado correctamente.",
+            "data"=>$data
+
+        ]);
+
     }
 
     /**
@@ -68,6 +107,14 @@ class CategoriesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Categorie::find($id);
+        if($data){
+            $data->delete();
+        }
+        return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Dato eliminado correctamente."
+        ]);
+
     }
 }

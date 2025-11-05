@@ -9,6 +9,9 @@ use App\Http\Controllers\TransactionsController;
 
 //redirecciona al index de AccountsController
 Route::resource('accounts',AccountsController::class);
+Route::post('changeStatus',[AccountsController::class,'changeStatus']);
+
+
 Route::resource('categories',CategoriesController::class);
 Route::resource('transactions',TransactionsController::class);
 

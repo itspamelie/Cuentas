@@ -42,7 +42,23 @@ class AccountsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //php  artisan install:api
+       $validated = $request->validate([
+            'name'=>'required|string|min:2',
+            'amount'=>'required|numeric',
+            'status'=>'required',
+            'user_id'=>'required'
+        ]);
+
+        //metodo si los campos se llaman igual que en la base de datos
+        $data = Account::create($validated);
+          return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Recurso o dato insertado correctamente.",
+            "data"=>$data
+
+        ]);
+
     }
 
     /**
@@ -50,7 +66,18 @@ class AccountsController extends Controller
      */
     public function show(string $id)
     {
-        //
+         $data = Account::find($id);
+        if($data){
+            return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Cuenta encontrada.",
+            "data"=>$data
+        ]);
+        }
+        return response()->json([
+            "status"=>"error",
+            "mesage"=>"Cuenta no encontrada."
+        ],400);
     }
 
     /**
@@ -66,14 +93,59 @@ class AccountsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       $validated = $request->validate([
+            'name'=>'required|string|min:2',
+            'amount'=>'required|numeric',
+            'status'=>'required',
+            'user_id'=>'required'
+        ]);
+
+        //metodo si los campos se llaman igual que en la base de datos
+        $data = Account::findOrFail($id);
+        $data->update($validated);
+          return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Recurso o dato actualizado correctamente.",
+            "data"=>$data
+
+        ]);
+
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $data = Account::find($id);
+        if($data){
+            $data->delete();
+        }
+        return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Dato eliminado correctamente."
+        ]);
+
     }
+
+        public function changeStatus(Request $request){
+        $data = Account::find($request->id);
+        if ($data){
+            $data->status =$request->status;
+            $data->save();
+        }
+         return response()->json([
+            "status"=>"ok",
+            "mesage"=>"Estatus actualizado correctamente",
+            "data"=>$data
+
+        ]);
+    }
+
+
+
 }
+
+
