@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //IMPORTAR MODELO
 use App\Models\Account;
+use Illuminate\Support\Facades\Auth;
 
 class AccountsController extends Controller
 {
@@ -19,7 +20,10 @@ class AccountsController extends Controller
             )->join('users',"accounts.user_id","=","user_id")
             ->get();*/
             //jalar account con su inner join(user)
-            $data = Account::with(['user'])->get();
+            $data = Account::with(['user'])
+            //SOLO LE MOSTRARA LOS DATOS DEL USUARIO
+            ->where("user_id",Auth::user()->id)
+            ->get();
 
         //Siempre que hagamos una api enviamos un JSON
         return response()->json([
@@ -47,10 +51,11 @@ class AccountsController extends Controller
             'name'=>'required|string|min:2',
             'amount'=>'required|numeric',
             'status'=>'required',
-            'user_id'=>'required'
+            //quitar el user_id
         ]);
 
         //metodo si los campos se llaman igual que en la base de datos
+        $validated['user_id']=Auth::user()->id;
         $data = Account::create($validated);
           return response()->json([
             "status"=>"ok",
@@ -58,6 +63,7 @@ class AccountsController extends Controller
             "data"=>$data
 
         ]);
+        
 
     }
 
