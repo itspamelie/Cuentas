@@ -1,30 +1,16 @@
 import { useState } from 'react'
 import './../App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from '../layouts/header';
-import Sidebar from '../layouts/sidebar';
 import Card from '../layouts/Card';
 import CreditCard from '../layouts/CreditCard';
 
 
 function Home() {
-var x=0
-//react hooks
-let [contador,setContador] = useState(10)
-let [arr,setArr]=useState([])
-let clickBoton=()=>{
-  setContador(++contador)
-  console.log(contador)
-  let x=[...arr,contador]
-  setArr(x)
-}
+
   return (
     <>
      
-<div className="d-flex">
-<Sidebar/>
     <div className="content-area flex-grow-1">
-<Header/>
 
 
         <div className="row g-4">
@@ -85,7 +71,7 @@ let clickBoton=()=>{
         </div>
 
     </div>
-</div>
+
     </>
   )
 }
